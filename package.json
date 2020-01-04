@@ -1,0 +1,42 @@
+{
+  "name": "tree-drawing",
+  "version": "1.0.0",
+  "description": "Tree drawing algorithm - A variation over Reingold Tilford",
+  "main": "index.js",
+  "dependencies": {
+    "emotion": "^10.0.27",
+    "preact": "^10.1.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-decorators": "^7.7.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.7.5",
+    "@babel/plugin-transform-react-jsx": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/preset-typescript": "^7.7.7",
+    "babel-loader": "^8.0.6",
+    "file-loader": "^5.0.2",
+    "html-webpack-plugin": "^3.2.0",
+    "typescript": "^3.7.4",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1"
+  },
+  "scripts": {
+    "watch": "webpack --watch",
+    "start": "webpack-dev-server --open",
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webf-zone/tree-drawing.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/webf-zone/tree-drawing/issues"
+  },
+  "homepage": "https://github.com/webf-zone/tree-drawing#readme"
+}
