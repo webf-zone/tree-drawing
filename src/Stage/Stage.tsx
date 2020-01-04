@@ -1,48 +1,38 @@
 import { h } from 'preact';
 import { cx, css } from 'emotion';
+import { useState } from 'preact/hooks';
 
 import { gridBG } from './stageGrid';
 
 import { UnclonedBackupJobs } from '../shapes/UnclonedBackupJobs';
-import { Merge } from '../shapes/Merge';
 
-export type Dimensions = {
-  xUnits: number;
-  yUnits: number;
-};
 
 export type StageProps = {
   class?: string;
-
-  dimensions: Dimensions;
 };
 
 
-const canvas = css`
+const stage = css`
   display: block;
   width: 100%;
   height: 100%;
 
-  box-sizing: border-box;
-
-  /* text {
-    dominant-baseline: text-before-edge;
-  } */
+  position: relative;
 `;
 
 
 export function Stage(props: StageProps) {
 
-  const { dimensions: { xUnits, yUnits } } = props;
+  const [dim, setDim] = useState([400, 300]);
 
-  const viewBox = `0 0 ${xUnits} ${yUnits}`;
+  const onResize = (x: [number, number]) => {
+    // console.log('Resize', x);
+    setDim(x);
+  };
 
   return (
-    <div class={cx('stage', props.class)}>
-      <svg class={cx(canvas, gridBG)} viewBox={viewBox} preserveAspectRatio='xMinYMin meet'>
-        {/* <UnclonedBackupJobs x={0} y={0} width={600} height={200} /> */}
-        <Merge x={0} y={0} width={400} height={400} />
-      </svg>
+    <div class={cx('stage', stage, props.class)}>
+      <UnclonedBackupJobs x={0} y={0} width={dim[0]} height={dim[1]} onResize={onResize} />
     </div>
   );
 }

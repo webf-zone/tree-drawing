@@ -4,7 +4,7 @@ import { h } from 'preact';
 import { Link } from '../icons/Link';
 import { Merge as MergeIcon } from '../icons/Merge';
 
-import { BaseShape } from './core/Shape';
+import { BaseShape } from './core/BaseShape';
 import { topLeft } from './core/helper';
 
 const textStyle = css`

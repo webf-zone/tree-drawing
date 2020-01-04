@@ -2,23 +2,25 @@ import { cx, css } from 'emotion';
 import { h } from 'preact';
 
 import { Box } from './core/Box';
-import { BaseShape } from './core/Shape';
+import { BaseShape } from './core/BaseShape';
 
 
-const titleFill = '#EBD397';
-const bodyFill = '#EAEAEA';
+export interface CompProp extends BaseShape {
+};
 
-export function UnclonedBackupJobs(props: BaseShape) {
 
-  const { x, y, width, height } = props;
+const shapeStyle = css`
+  --title-fill: #EBD397;
+  --body-fill: #EAEAEA;
+`;
+
+
+export function UnclonedBackupJobs(props: CompProp) {
 
   const text = 'Uncloned Backup Jobs';
 
   return (
-    <Box x={x} y={y} xAspect={300} yAspect={100}
-      width={width} height={height}
-      body={text} bodyFill={bodyFill}
-      title={text} titleFill={titleFill} />
+    <Box class={shapeStyle} body={text} title={text} minWidth={300} minHeight={100} {...props} />
   );
 }
 

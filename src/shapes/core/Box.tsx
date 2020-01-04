@@ -1,69 +1,77 @@
 import { h } from 'preact';
 import { cx, css } from 'emotion';
 
-import { Link } from './../../icons/Link';
-import { middle } from './helper';
+import { SVGIcon } from '../../icons/SVGIcon';
 
-const titleStyle = css`
-  font-size: 1.125rem;
-  line-height: 1;
+import { BaseShape } from './BaseShape';
+import { Shape } from './Shape';
+
+
+const boxStyle = css`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+
+  --title-fill: gray;
+  --body-fill: gray;
 `;
 
 
-export interface BoxProps {
+const titleStyle = css`
+  padding: 1rem 0.5rem;
+  display: flex;
+  flex-grow: 1;
+
+  font-size: 1.125rem;
+  line-height: 1;
+
+  background-color: var(--title-fill);
+
+  h3 {
+    margin: 0;
+    font-size: inherit;
+  }
+`;
+
+const bodyStyle = css`
+  padding: 1rem 0.5rem;
+  flex-grow: 1;
+  background-color: var(--body-fill);
+`;
+
+const linkStyle = css`
+  margin-left: auto;
+`;
+
+
+export interface BoxProps extends BaseShape {
+  class?: string;
+
   title: string;
-  titleFill: string;
-
   body: string;
-  bodyFill: string;
 
-  x: number;
-  y: number;
-
-  width: number;
-  height: number;
-
-  xAspect: number;
-  yAspect: number;
+  onResize?: (dim: [number, number]) => void;
 };
-
-const gap: number = 16;
 
 export function Box(props: BoxProps) {
 
-  const { x, y, xAspect, yAspect, width, height } = props;
-  const { title, body, titleFill, bodyFill } = props;
-
-  const viewBox = `0 0 ${xAspect} ${yAspect}`;
-
-  const rectH = yAspect / 2;
-  const rectX = 0;
-  const textDisplaceent = (rectH / 2);
-
-  // 1st Rect
-  const rect1Y = 0;
-  const titleY = rect1Y + textDisplaceent;
-
-  // 2nd Rect
-  const rect2Y = yAspect / 2;
-  const bodyY = rect2Y + textDisplaceent;
-
-  // icon
-  const iconSize = 16;
-  const iconX = xAspect - iconSize - gap;
-  const iconY = (rectH - iconSize) / 2;
+  const { title, body, minHeight, minWidth, x, y, width, height } = props;
 
   return (
-    <svg x={x} y={y} width={width} height={height} viewBox={viewBox} preserveAspectRatio='xMinYMin meet'
-      class={cx()}>
+    <Shape {...props}>
+      <div class={cx('box', boxStyle, props.class)}>
+        {/* Title */}
+        <div class={titleStyle}>
+          <h3>{title}</h3>
+          <SVGIcon class={linkStyle} name='link' width='18px' height='18px' />
+        </div>
 
-      <rect fill={titleFill} x={rectX} y={rect1Y} width={xAspect} height={rectH} />
-      <text class={cx(middle, titleStyle)} x={1.5 * gap + iconSize} y={titleY}>{title}</text>
-      <Link x={gap} y={iconY} width={iconSize} height={iconSize}/>
-      <Link x={iconX} y={iconY} width={iconSize} height={iconSize}/>
-
-      <rect fill={bodyFill} x={rectX} y={rect2Y} width={xAspect} height={rectH} />
-      <text class={middle} x={gap} y={bodyY}>{body}</text>
-    </svg>
+        {/* Body */}
+        <div class={bodyStyle}>
+          {body}
+        </div>
+      </div>
+    </Shape>
   );
 }

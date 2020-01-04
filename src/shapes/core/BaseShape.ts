@@ -12,4 +12,7 @@ export interface BaseShape {
 
   width: number;
   height: number;
+
+  selected?: boolean;
+  onResize?: (dim: [number, number]) => void;
 }
