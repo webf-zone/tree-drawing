@@ -60,7 +60,7 @@ export function Box(props: BoxProps) {
 
   return (
     <Shape {...props}>
-      <div class={cx('box', boxStyle, props.class)}>
+      <div class={cx('box', 'shape-selector', boxStyle, props.class)}>
         {/* Title */}
         <div class={titleStyle}>
           <h3>{title}</h3>

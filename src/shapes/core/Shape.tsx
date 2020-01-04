@@ -1,6 +1,6 @@
 import { cx, css } from 'emotion';
 import { h, JSX } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
+import { useState, useEffect, useRef } from 'preact/hooks';
 
 import { SVGIcon } from '../../icons/SVGIcon';
 
@@ -51,23 +51,23 @@ export function Shape(props: ShapeProps) {
   useEffect(() => {
 
     if (isResize) {
-      const mouseMoveHandler = (e: MouseEvent) => {
+      const onResizeMove = (e: MouseEvent) => {
         const diffX = e.pageX - downXY[0];
         const diffY = e.pageY - downXY[1];
         setZoomFactor([diffX, diffY]);
       };
 
-      const mouseUpHandler = (e: MouseEvent) => {
+      const onResizeEnd = (e: MouseEvent) => {
         onResize?.(border as any);
         setIsResize(false);
       };
 
-      document.addEventListener('mousemove', mouseMoveHandler);
-      document.addEventListener('mouseup', mouseUpHandler)
+      document.addEventListener('mousemove', onResizeMove);
+      document.addEventListener('mouseup', onResizeEnd)
 
       return () => {
-        document.removeEventListener('mousemove', mouseMoveHandler);
-        document.removeEventListener('mouseup', mouseUpHandler);
+        document.removeEventListener('mousemove', onResizeMove);
+        document.removeEventListener('mouseup', onResizeEnd);
       };
     }
 
@@ -75,44 +75,22 @@ export function Shape(props: ShapeProps) {
 
   useEffect(() => {
 
-    if (isResize) {
+    const newWidth = Math.min(
+      maxWidth || 500,
+      Math.max(minWidth || 0, width + zoomFactor[0]));
 
-      let frame: number = 0;
+    const newHeight = Math.min(
+      maxHeight || 500,
+      Math.max(minHeight || 0, height + zoomFactor[1]));
 
-      const loop = () => {
-
-        const newWidth = Math.min(
-          maxWidth || 500,
-          Math.max(minWidth || 0, width + zoomFactor[0]));
-
-        const newHeight = Math.min(
-          maxHeight || 500,
-          Math.max(minHeight || 0, height + zoomFactor[1]));
-
-        setBorder([newWidth, newHeight]);
-
-        if (isResize) {
-          frame = requestAnimationFrame(loop);
-        }
-      }
-
-      frame = requestAnimationFrame(loop);
-
-      return () => {
-        // console.log('Cancelling');
-        cancelAnimationFrame(frame);
-      };
-    }
-
+    setBorder([newWidth, newHeight]);
 
   }, [isResize, zoomFactor, width, height, minWidth, minHeight]);
 
 
-  const onMouseDown = (e: MouseEvent) => {
-    const dim = [e.pageX, e.pageY];
-
+  const onResizeBegin = (e: MouseEvent) => {
     setIsResize(true);
-    setDownXY(dim);
+    setDownXY([e.pageX, e.pageY]);
   };
 
   const style = {
@@ -136,7 +114,7 @@ export function Shape(props: ShapeProps) {
 
       {props.children}
 
-      <div class={resizeIcon} onMouseDown={onMouseDown}>
+      <div class={resizeIcon} onMouseDown={onResizeBegin}>
         <SVGIcon name='replayConsistency' width='18px' height='18px' />
       </div>
 
