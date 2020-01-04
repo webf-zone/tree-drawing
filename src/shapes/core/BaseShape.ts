@@ -15,4 +15,5 @@ export interface BaseShape {
 
   selected?: boolean;
   onResize?: (dim: [number, number]) => void;
+  onMove?: (dim: [number, number]) => void;
 }

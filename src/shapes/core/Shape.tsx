@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from 'preact/hooks';
 import { SVGIcon } from '../../icons/SVGIcon';
 
 import { BaseShape } from './BaseShape';
+import { useAnimationWhen } from './hook';
 
 export interface ShapeProps extends BaseShape {
   class?: string;
@@ -40,27 +41,34 @@ const resizeIcon = css`
 
 export function Shape(props: ShapeProps) {
 
-  const { x, y, width, height, minWidth, minHeight, maxWidth, maxHeight, selected, onResize } = props;
+  const { x, y, width, height, minWidth, minHeight, maxWidth, maxHeight, selected, onResize, onMove } = props;
 
-  const [zoomFactor, setZoomFactor] = useState([0, 0]);
-  const [downXY, setDownXY] = useState([0, 0]);
+  const [resizeOriginXY, setResizeOriginXY] = useState([0, 0]);
+  const resizeLatestXY = useRef([0, 0]);
   const [border, setBorder] = useState([width, height]);
 
-  const [isResize, setIsResize] = useState(false);
+  const [dragOriginXY, setDragOriginXY] = useState([0, 0]);
+  const dragLatestXY = useRef([0, 0]);
+  const [translateXY, setTranslateXY] = useState([0, 0]);
 
+  const [isResize, setIsResize] = useState(false);
+  const [isDrag, setIsDrag] = useState(false);
+
+  // Mouse handlers for Resize event
   useEffect(() => {
 
     if (isResize) {
       const onResizeMove = (e: MouseEvent) => {
-        const diffX = e.pageX - downXY[0];
-        const diffY = e.pageY - downXY[1];
-        setZoomFactor([diffX, diffY]);
+        resizeLatestXY.current = [e.pageX, e.pageY];
       };
 
-      const onResizeEnd = (e: MouseEvent) => {
-        onResize?.(border as any);
-        setIsResize(false);
-      };
+      const onResizeEnd = (e: MouseEvent) =>
+        setBorder((b: any) => {
+          onResize?.(b);
+          setIsResize(false);
+
+          return b;
+        });
 
       document.addEventListener('mousemove', onResizeMove);
       document.addEventListener('mouseup', onResizeEnd)
@@ -71,35 +79,85 @@ export function Shape(props: ShapeProps) {
       };
     }
 
-  }, [isResize, border]);
+    // No-op cleanup
+    return () => {};
 
-  useEffect(() => {
+  }, [isResize]);
+
+  // Animation loop for Resize event
+  useAnimationWhen(() => {
+    const [x, y] = resizeLatestXY.current;
 
     const newWidth = Math.min(
       maxWidth || 500,
-      Math.max(minWidth || 0, width + zoomFactor[0]));
+      Math.max(minWidth || 0, width + x - resizeOriginXY[0]));
 
     const newHeight = Math.min(
       maxHeight || 500,
-      Math.max(minHeight || 0, height + zoomFactor[1]));
+      Math.max(minHeight || 0, height + y - resizeOriginXY[1]));
 
     setBorder([newWidth, newHeight]);
 
-  }, [isResize, zoomFactor, width, height, minWidth, minHeight]);
+  }, isResize, [width, height, minWidth, minHeight]);
+
+  // Global mouse handler for Drag event
+  useEffect(() => {
+
+    if (isDrag) {
+      const onMove = (e: MouseEvent) => {
+        dragLatestXY.current = ([e.pageX, e.pageY]);
+      };
+
+      document.addEventListener('mousemove', onMove);
+
+      return () => {
+        document.removeEventListener('mousemove', onMove);
+      };
+    } else {
+      setTranslateXY([0, 0]);
+    }
+
+  }, [isDrag]);
+
+  useAnimationWhen(() => {
+    const diffX = dragLatestXY.current[0] - dragOriginXY[0];
+    const diffY = dragLatestXY.current[1] - dragOriginXY[1];
+
+    setTranslateXY([diffX, diffY]);
+  }, isDrag, [dragOriginXY, dragLatestXY]);
 
 
   const onResizeBegin = (e: MouseEvent) => {
     setIsResize(true);
-    setDownXY([e.pageX, e.pageY]);
+    setResizeOriginXY([e.pageX, e.pageY]);
+    resizeLatestXY.current = [e.pageX, e.pageY];
+  };
+
+  const onDragBegin = (e: MouseEvent) => {
+    const shapeSelector = (e.target as HTMLElement).closest('.shape-selector');
+
+    if (shapeSelector) {
+      setIsDrag(true);
+      setDragOriginXY([e.pageX, e.pageY]);
+      dragLatestXY.current = [e.pageX, e.pageY];
+    }
+  };
+
+  const onDragEnd = (_e: MouseEvent) => {
+    setIsDrag(false);
+    onMove?.([x + translateXY[0], y + translateXY[1]]);
   };
 
   const style = {
+    left: `${x}px`,
+    top: `${y}px`,
     width: `${width}px`,
     height: `${height}px`,
     minWidth: `${minWidth}px`,
     minHeight: `${minHeight}px`,
     maxWidth: `${maxWidth}px`,
-    maxHeight: `${maxHeight}px`
+    maxHeight: `${maxHeight}px`,
+    transform: `translate3d(${translateXY[0]}px, ${translateXY[1]}px, 0)`
   };
 
   const selectionStyle = {
@@ -110,8 +168,7 @@ export function Shape(props: ShapeProps) {
   const shapeStyles = cx('shape', shapeStyle, props.class);
 
   return (
-    <div class={shapeStyles} style={style}>
-
+    <div class={shapeStyles} style={style} onMouseDown={onDragBegin} onMouseUp={onDragEnd}>
       {props.children}
 
       <div class={resizeIcon} onMouseDown={onResizeBegin}>

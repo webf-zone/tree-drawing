@@ -52,6 +52,7 @@ export interface BoxProps extends BaseShape {
   body: string;
 
   onResize?: (dim: [number, number]) => void;
+  selected?: boolean;
 };
 
 export function Box(props: BoxProps) {

@@ -24,15 +24,23 @@ const stage = css`
 export function Stage(props: StageProps) {
 
   const [dim, setDim] = useState([400, 300]);
+  const [pos, setPos] = useState([0, 0]);
 
   const onResize = (x: [number, number]) => {
     // console.log('Resize', x);
     setDim(x);
   };
 
+  const onMove = (x: [number, number]) => {
+    // console.log('Resize', x);
+    setPos(x);
+  };
+
   return (
     <div class={cx('stage', stage, props.class)}>
-      <UnclonedBackupJobs x={0} y={0} width={dim[0]} height={dim[1]} onResize={onResize} />
+      <UnclonedBackupJobs x={pos[0]} y={pos[1]} width={dim[0]} height={dim[1]}
+        onResize={onResize} selected={false}
+        onMove={onMove}/>
     </div>
   );
 }
