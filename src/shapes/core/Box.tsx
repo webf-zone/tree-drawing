@@ -1,15 +1,12 @@
 import { h } from 'preact';
 import { cx, css } from 'emotion';
-import { BaseShape } from './Shape';
+
 import { Link } from './../../icons/Link';
+import { middle } from './helper';
 
 const titleStyle = css`
   font-size: 1.125rem;
   line-height: 1;
-`;
-
-const middle = css`
-  dominant-baseline: middle;
 `;
 
 
@@ -52,7 +49,7 @@ export function Box(props: BoxProps) {
   const bodyY = rect2Y + textDisplaceent;
 
   // icon
-  const iconSize = 24;
+  const iconSize = 16;
   const iconX = xAspect - iconSize - gap;
   const iconY = (rectH - iconSize) / 2;
 
@@ -61,7 +58,8 @@ export function Box(props: BoxProps) {
       class={cx()}>
 
       <rect fill={titleFill} x={rectX} y={rect1Y} width={xAspect} height={rectH} />
-      <text class={cx(middle, titleStyle)} x={gap} y={titleY}>{title}</text>
+      <text class={cx(middle, titleStyle)} x={1.5 * gap + iconSize} y={titleY}>{title}</text>
+      <Link x={gap} y={iconY} width={iconSize} height={iconSize}/>
       <Link x={iconX} y={iconY} width={iconSize} height={iconSize}/>
 
       <rect fill={bodyFill} x={rectX} y={rect2Y} width={xAspect} height={rectH} />

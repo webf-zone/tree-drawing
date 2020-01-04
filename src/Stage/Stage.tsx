@@ -4,6 +4,7 @@ import { cx, css } from 'emotion';
 import { gridBG } from './stageGrid';
 
 import { UnclonedBackupJobs } from '../shapes/UnclonedBackupJobs';
+import { Merge } from '../shapes/Merge';
 
 export type Dimensions = {
   xUnits: number;
@@ -39,7 +40,8 @@ export function Stage(props: StageProps) {
   return (
     <div class={cx('stage', props.class)}>
       <svg class={cx(canvas, gridBG)} viewBox={viewBox} preserveAspectRatio='xMinYMin meet'>
-        <UnclonedBackupJobs x={0} y={0} width={600} height={200} />
+        {/* <UnclonedBackupJobs x={0} y={0} width={600} height={200} /> */}
+        <Merge x={0} y={0} width={400} height={400} />
       </svg>
     </div>
   );

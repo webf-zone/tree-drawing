@@ -15,7 +15,7 @@ export function UnclonedBackupJobs(props: BaseShape) {
   const text = 'Uncloned Backup Jobs';
 
   return (
-  <Box x={x} y={y} xAspect={300} yAspect={100}
+    <Box x={x} y={y} xAspect={300} yAspect={100}
       width={width} height={height}
       body={text} bodyFill={bodyFill}
       title={text} titleFill={titleFill} />
