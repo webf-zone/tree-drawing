@@ -17,8 +17,9 @@ const shapeStyle = css`
   user-select: none;
 `;
 
-const transitionStyle = css`
+const activatedStyle = css`
   opacity: 0.70;
+  z-index: 2;
 `;
 
 const selectionFrameStyle = css`
@@ -171,7 +172,7 @@ export function Shape(props: ShapeProps) {
     height: `${border[1]}px`
   };
 
-  const shapeStyles = cx('shape', shapeStyle, (isDrag || isResize) && transitionStyle, props.class);
+  const shapeStyles = cx('shape', shapeStyle, (isDrag || isResize) && activatedStyle, props.class);
 
   return (
     <div class={shapeStyles} style={style} onMouseDown={onDragBegin} onMouseUp={onDragEnd}>
