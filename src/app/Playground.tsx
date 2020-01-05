@@ -6,6 +6,7 @@ import { Stage } from '../Stage/Stage';
 import { AnyShape } from '../shapes/AllShapes';
 import { cx } from 'emotion';
 import { UnclonedBackupJobs } from '../shapes/UnclonedBackupJobs';
+import { Connector } from '../shapes/core/Connector';
 
 export type PlaygroundProps = {
   class: string;
@@ -94,13 +95,19 @@ export function Playground(props: PlaygroundProps) {
       );
     }
 
-    return null as any;
+    return null as any as JSX.Element;
   });
+
+  const conn1 = (
+    <Connector left={shapes[0].specs} right={shapes[1].specs} />
+  );
+
+  const allChildren = [...children, conn1];
 
   return (
     <div class={cx(props.class)}>
       <Stage>
-        {children}
+        {allChildren}
       </Stage>
     </div>
   );

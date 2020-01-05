@@ -15,6 +15,7 @@ export interface ShapeProps extends BaseShape {
 const shapeStyle = css`
   position: absolute;
   user-select: none;
+  z-index: 1;
 `;
 
 const activatedStyle = css`
@@ -129,8 +130,9 @@ export function Shape(props: ShapeProps) {
   useAnimationWhen(() => {
     const diffX = dragLatestXY.current[0] - dragOriginXY[0];
     const diffY = dragLatestXY.current[1] - dragOriginXY[1];
+    const diff = [diffX, diffY];
 
-    setTranslateXY([diffX, diffY]);
+    setTranslateXY(diff);
   }, isDrag, [dragOriginXY, dragLatestXY]);
 
 
