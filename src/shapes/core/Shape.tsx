@@ -17,6 +17,10 @@ const shapeStyle = css`
   user-select: none;
 `;
 
+const transitionStyle = css`
+  opacity: 0.70;
+`;
+
 const selectionFrameStyle = css`
   position: absolute;
   display: block;
@@ -26,6 +30,8 @@ const selectionFrameStyle = css`
   left: 0;
   border: 3px dashed gray;
   box-sizing: border-box;
+
+  pointer-events: none;
 `;
 
 const resizeIcon = css`
@@ -165,7 +171,7 @@ export function Shape(props: ShapeProps) {
     height: `${border[1]}px`
   };
 
-  const shapeStyles = cx('shape', shapeStyle, props.class);
+  const shapeStyles = cx('shape', shapeStyle, (isDrag || isResize) && transitionStyle, props.class);
 
   return (
     <div class={shapeStyles} style={style} onMouseDown={onDragBegin} onMouseUp={onDragEnd}>
