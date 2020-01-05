@@ -17,3 +17,18 @@ export interface BaseShape {
   onResize?: (dim: [number, number]) => void;
   onMove?: (dim: [number, number]) => void;
 }
+
+
+export interface ShapeInstance {
+  x: number;
+  y: number;
+
+  width: number;
+  height: number;
+
+  selected?: boolean;
+  disabled?: boolean;
+
+  onResize?: (dim: [number, number]) => void;
+  onMove?: (dim: [number, number]) => void;
+}

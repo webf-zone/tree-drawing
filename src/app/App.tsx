@@ -1,7 +1,6 @@
 import { css, cx } from 'emotion';
 import { h } from 'preact';
-
-import { Stage } from '../Stage/Stage';
+import { Playground } from './Playground';
 
 
 const appStyle = css`
@@ -15,7 +14,7 @@ const appStyle = css`
 
   grid-template-areas:
     'header header'
-    'toolbox canvas';
+    'toolbox playground';
 `;
 
 const headerStyle = css`
@@ -40,19 +39,14 @@ const toolboxStyle = css`
   background: #F8F8F8;
 `;
 
-const canvasStyle = css`
-  grid-area: canvas;
+const playgroundStyle = css`
+  grid-area: playground;
 
   min-width: 0;
   min-height: 0;
 `;
 
 export function App() {
-
-  const dimensions = {
-    xUnits: 1500,
-    yUnits: 600
-  };
 
   return (
     <div class={cx('app', appStyle)}>
@@ -62,7 +56,7 @@ export function App() {
       <div class={toolboxStyle}>
         <p>Toolbox</p>
       </div>
-      <Stage class={canvasStyle} dimensions={dimensions} />
+      <Playground class={playgroundStyle} />
     </div>
   );
 }

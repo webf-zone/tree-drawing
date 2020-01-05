@@ -2,10 +2,10 @@ import { cx, css } from 'emotion';
 import { h } from 'preact';
 
 import { Box } from './core/Box';
-import { BaseShape } from './core/BaseShape';
+import { BaseShape, ShapeInstance } from './core/BaseShape';
 
 
-export interface CompProp extends BaseShape {
+export interface UnclonedBackupJobsProps extends ShapeInstance {
 };
 
 
@@ -15,7 +15,7 @@ const shapeStyle = css`
 `;
 
 
-export function UnclonedBackupJobs(props: CompProp) {
+export function UnclonedBackupJobs(props: UnclonedBackupJobsProps) {
 
   const text = 'Uncloned Backup Jobs';
 
