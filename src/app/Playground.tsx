@@ -100,7 +100,7 @@ export function Playground(props: PlaygroundProps) {
         };
 
         setShapes(newShapes);
-        setUnderMovement(true);
+        setUnderMovement(false);
       };
 
       const onMoving = ([x, y]: [number, number]) => {
@@ -118,6 +118,7 @@ export function Playground(props: PlaygroundProps) {
         };
 
         setShapes(newShapes);
+        setUnderMovement(true);
       };
 
       return (

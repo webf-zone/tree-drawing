@@ -23,17 +23,20 @@ const stage = css`
 `;
 
 const canvas = css`
-  ${stage}
+  position: relative;
 `;
 
 
 export function Stage(props: StageProps) {
 
+  const rootElm = useRef<HTMLDivElement>(null as any);
   const [isDrag, setIsDrag] = useState(false);
   const [dragOriginXY, setDragOriginXY] = useState([0, 0]);
   const dragLatestXY = useRef([0, 0]);
   const [translateXY, setTranslateXY] = useState([0, 0]);
   const [originXYAtDrag, setOriginXYAtDrag] = useState([0, 0]);
+
+  const movingXY = useRef([0, 0]);
 
   const stopper = useAnimationWhen(() => {
 
@@ -74,10 +77,66 @@ export function Stage(props: StageProps) {
 
   }, [isDrag]);
 
+  useEffect(() => {
+    if (props.underMovement) {
+
+      const elm = rootElm.current;
+
+      const onMouseMove = (e: MouseEvent) => {
+        movingXY.current = [e.pageX, e.pageY];
+      };
+
+      elm.addEventListener('mousemove', onMouseMove);
+
+      return () => elm.removeEventListener('mousemove', onMouseMove);
+
+    }
+  }, [props.underMovement]);
+
+
+  useAnimationWhen(() => {
+
+    const { left, top, width, height } = rootElm.current.getBoundingClientRect();
+
+    const evX = Math.max(0, movingXY.current[0] - (left + window.scrollX));
+    const evY = Math.max(0, movingXY.current[1] - (top + window.scrollY));
+
+    const isLeft = evX <= 32;
+    const isRight = width - evX <= 32;
+    const isTop = evY <= 32;
+    const isBottom = height - evY <= 32;
+
+    setTranslateXY((c) => {
+
+      if (isLeft && isTop) {
+        return [Math.min(0, c[0] + 4), Math.min(0, c[1] + 4)];
+      } else if (isRight && isTop) {
+        return [c[0] + 4, Math.min(0, c[1] + 4)];
+      } else if (isLeft && isBottom) {
+        return [Math.min(0, c[0] + 4), c[1] - 4];
+      } else if (isRight && isBottom) {
+        return [c[0] - 4, c[1] - 4];
+      } else if (isTop) {
+        return [c[0], Math.min(0, c[1] + 4)];
+      } else if (isRight) {
+        return [c[0] - 4, c[1]];
+      } else if (isBottom) {
+        return [c[0], c[1] - 4];
+      } else if (isLeft) {
+        return [Math.min(0, c[0] + 4), c[1]];
+      }
+
+      return c;
+    });
+
+  }, props.underMovement, [movingXY]);
+
   const children = toChildArray(props.children);
 
   const onMouseDown = (e: MouseEvent) => {
-    if ((e.target as HTMLElement).classList.contains('stage')) {
+    const target = (e.target as HTMLElement);
+
+    if (target.classList.contains('stage')) {
       setIsDrag(true);
       setOriginXYAtDrag(translateXY);
       setDragOriginXY([e.pageX, e.pageY]);
@@ -90,8 +149,8 @@ export function Stage(props: StageProps) {
   };
 
   return (
-    <div class={cx('stage', stage, props.class)} onMouseDown={onMouseDown} >
-      <div class={cx('stage-canvas', canvas)} style={style}>
+    <div ref={rootElm} class={cx('stage', stage, props.class)} onMouseDown={onMouseDown} >
+      <div class={cx('stage__canvas', canvas)} style={style}>
         {children}
       </div>
     </div>
