@@ -16,10 +16,14 @@ export interface BaseShape {
   selected?: boolean;
   onResize?: (dim: [number, number]) => void;
   onMove?: (dim: [number, number]) => void;
+
+  onMoving?: (dim: [number, number]) => void;
 }
 
 
 export interface ShapeInstance {
+  tempX?: number;
+  tempY?: number;
   x: number;
   y: number;
 
@@ -31,4 +35,5 @@ export interface ShapeInstance {
 
   onResize?: (dim: [number, number]) => void;
   onMove?: (dim: [number, number]) => void;
+  onMoving?: (dim: [number, number]) => void;
 }

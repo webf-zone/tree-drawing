@@ -81,7 +81,26 @@ export function Playground(props: PlaygroundProps) {
           specs: {
             ...specs,
             x,
-            y
+            y,
+            tempX: undefined,
+            tempY: undefined
+          }
+        };
+
+        setShapes(newShapes);
+      };
+
+      const onMoving = ([x, y]: [number, number]) => {
+        const newShapes = [
+          ...shapes
+        ];
+
+        newShapes[index] = {
+          type,
+          specs: {
+            ...specs,
+            tempX: x,
+            tempY: y
           }
         };
 
@@ -91,7 +110,7 @@ export function Playground(props: PlaygroundProps) {
       return (
         <UnclonedBackupJobs x={specs.x} y={specs.y} width={specs.width} height={specs.height}
           onResize={onResize} selected={specs.selected}
-          onMove={onMove}/>
+          onMove={onMove} onMoving={onMoving} />
       );
     }
 

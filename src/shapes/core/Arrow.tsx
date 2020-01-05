@@ -4,6 +4,9 @@ import { useMemo } from 'preact/hooks';
 
 
 export type ArrowProps = {
+
+  class: string;
+
   // Two ends of a line
   x2: number;
   y2: number;
@@ -47,7 +50,7 @@ export function Arrow(props: ArrowProps) {
   };
 
   return (
-    <div class={cx('arrow', style)} style={dynamicStyle}></div>
+    <div class={cx('arrow', style, props.class)} style={dynamicStyle}></div>
   )
 
 }

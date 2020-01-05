@@ -49,7 +49,7 @@ const resizeIcon = css`
 
 export function Shape(props: ShapeProps) {
 
-  const { x, y, width, height, minWidth, minHeight, maxWidth, maxHeight, selected, onResize, onMove } = props;
+  const { x, y, width, height, minWidth, minHeight, maxWidth, maxHeight, selected, onResize, onMove, onMoving } = props;
 
   const [resizeOriginXY, setResizeOriginXY] = useState([0, 0]);
   const resizeLatestXY = useRef([0, 0]);
@@ -127,13 +127,14 @@ export function Shape(props: ShapeProps) {
 
   }, [isDrag]);
 
-  useAnimationWhen(() => {
+  const stopper = useAnimationWhen(() => {
     const diffX = dragLatestXY.current[0] - dragOriginXY[0];
     const diffY = dragLatestXY.current[1] - dragOriginXY[1];
     const diff = [diffX, diffY];
 
     setTranslateXY(diff);
-  }, isDrag, [dragOriginXY, dragLatestXY]);
+    onMoving?.([x + diffX, y + diffY]);
+  }, isDrag, [dragOriginXY, dragLatestXY, x, y]);
 
 
   const onResizeBegin = (e: MouseEvent) => {
@@ -154,6 +155,7 @@ export function Shape(props: ShapeProps) {
 
   const onDragEnd = (_e: MouseEvent) => {
     setIsDrag(false);
+    stopper.current();
     onMove?.([x + translateXY[0], y + translateXY[1]]);
   };
 
