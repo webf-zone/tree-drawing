@@ -20,10 +20,10 @@ export function Connector({ left, right }: ConnectorProps) {
   const { x: lx, y: ly, width: lw, height: lh } = left;
   const { x: rx, y: ry, width: rw, height: rh } = right;
 
-  const lxx = left.tempX || lx;
-  const lyy = left.tempY || ly;
-  const rxx = right.tempX || rx;
-  const ryy = right.tempY || ry;
+  const lxx = left.tempX !== undefined ? left.tempX : lx;
+  const lyy = left.tempY !== undefined ? left.tempY : ly;
+  const rxx = right.tempX !== undefined ? right.tempX : rx;
+  const ryy = right.tempY !== undefined ? right.tempY : ry;
 
   const x1 = lxx + (lw / 2);
   const y1 = lyy + (lh / 2);
@@ -31,14 +31,7 @@ export function Connector({ left, right }: ConnectorProps) {
   const x2 = rxx + (rw / 2);
   const y2 = ryy + (rh / 2);
 
-
-  // const x1 = lx + (lw / 2);
-  // const y1 = ly + (lh / 2);
-
-  // const x2 = rx + (rw / 2);
-  // const y2 = ry + (rh / 2);
-
-  const classes = cx((!!left.tempX || !!right.tempX) && activatedStyle);
+  const classes = cx((left.tempX !== undefined || right.tempX !== undefined) && activatedStyle);
 
   return (
     <Fragment>

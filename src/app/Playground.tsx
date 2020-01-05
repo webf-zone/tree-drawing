@@ -1,20 +1,32 @@
+import { cx, css } from 'emotion';
 import { h, JSX } from 'preact';
 import { useState } from 'preact/hooks';
 
 import { Forest } from '../models/Tree';
 import { Stage } from '../Stage/Stage';
 import { AnyShape } from '../shapes/AllShapes';
-import { cx } from 'emotion';
 import { UnclonedBackupJobs } from '../shapes/UnclonedBackupJobs';
 import { Connector } from '../shapes/core/Connector';
 
+import { gridBG } from './stageGrid';
+
+
 export type PlaygroundProps = {
   class: string;
-  // forest: Forest;
+  forest?: Forest;
 };
 
 
+const playgroundStyles = css`
+
+  ${gridBG}
+
+  overflow: hidden;
+`;
+
 export function Playground(props: PlaygroundProps) {
+
+  const [underMovement, setUnderMovement] = useState(false);
 
   const [shapes, setShapes] = useState<AnyShape[]>([{
     type: 'UnclonedBackupJobs',
@@ -88,6 +100,7 @@ export function Playground(props: PlaygroundProps) {
         };
 
         setShapes(newShapes);
+        setUnderMovement(true);
       };
 
       const onMoving = ([x, y]: [number, number]) => {
@@ -124,8 +137,8 @@ export function Playground(props: PlaygroundProps) {
   const allChildren = [...children, conn1];
 
   return (
-    <div class={cx(props.class)}>
-      <Stage>
+    <div class={cx('playground', playgroundStyles, props.class)}>
+      <Stage underMovement={underMovement}>
         {allChildren}
       </Stage>
     </div>

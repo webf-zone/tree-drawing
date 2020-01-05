@@ -108,33 +108,50 @@ export function Shape(props: ShapeProps) {
 
   }, isResize, [width, height, minWidth, minHeight]);
 
-  // Global mouse handler for Drag event
-  useEffect(() => {
-
-    if (isDrag) {
-      const onMove = (e: MouseEvent) => {
-        dragLatestXY.current = ([e.pageX, e.pageY]);
-      };
-
-      document.addEventListener('mousemove', onMove);
-
-      return () => {
-        document.removeEventListener('mousemove', onMove);
-      };
-    } else {
-      setTranslateXY([0, 0]);
-    }
-
-  }, [isDrag]);
 
   const stopper = useAnimationWhen(() => {
     const diffX = dragLatestXY.current[0] - dragOriginXY[0];
     const diffY = dragLatestXY.current[1] - dragOriginXY[1];
-    const diff = [diffX, diffY];
+
+    // Item should not move below (0, 0).
+    const diffXX = x + diffX > 0 ? diffX : -x;
+    const diffYY = y + diffY > 0 ? diffY : -y;
+
+    const diff = [diffXX, diffYY];
 
     setTranslateXY(diff);
-    onMoving?.([x + diffX, y + diffY]);
+    onMoving?.([x + diffXX, y + diffYY]);
+
   }, isDrag, [dragOriginXY, dragLatestXY, x, y]);
+
+  // Global mouse handler for Drag event
+  useEffect(() => {
+
+    if (isDrag) {
+      const onMouseMove = (e: MouseEvent) => {
+        dragLatestXY.current = ([e.pageX, e.pageY]);
+      };
+
+      const onDragEnd = (_e: MouseEvent) => {
+        setIsDrag(false);
+        stopper.current();
+        setTranslateXY((txy) => {
+          onMove?.([x + txy[0], y + txy[1]]);
+
+          return [0, 0];
+        })
+      };
+
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onDragEnd);
+
+      return () => {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onDragEnd);
+      };
+    }
+
+  }, [isDrag]);
 
 
   const onResizeBegin = (e: MouseEvent) => {
@@ -151,12 +168,6 @@ export function Shape(props: ShapeProps) {
       setDragOriginXY([e.pageX, e.pageY]);
       dragLatestXY.current = [e.pageX, e.pageY];
     }
-  };
-
-  const onDragEnd = (_e: MouseEvent) => {
-    setIsDrag(false);
-    stopper.current();
-    onMove?.([x + translateXY[0], y + translateXY[1]]);
   };
 
   const style = {
@@ -179,7 +190,7 @@ export function Shape(props: ShapeProps) {
   const shapeStyles = cx('shape', shapeStyle, (isDrag || isResize) && activatedStyle, props.class);
 
   return (
-    <div class={shapeStyles} style={style} onMouseDown={onDragBegin} onMouseUp={onDragEnd}>
+    <div class={shapeStyles} style={style} onMouseDown={onDragBegin}>
       {props.children}
 
       <div class={resizeIcon} onMouseDown={onResizeBegin}>

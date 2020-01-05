@@ -1,19 +1,20 @@
-import { h, JSX } from 'preact';
+import { h, JSX, toChildArray } from 'preact';
 import { cx, css } from 'emotion';
-
-import { gridBG } from './stageGrid';
 
 export type StageProps = {
   class?: string;
-
   children: JSX.Element[];
+
+  width?: number;
+  height?: number;
+  underMovement: boolean;
 };
 
 
 const stage = css`
   display: block;
-  width: 100%;
-  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
 
   position: relative;
 `;
@@ -21,9 +22,11 @@ const stage = css`
 
 export function Stage(props: StageProps) {
 
+  const children = toChildArray(props.children);
+
   return (
     <div class={cx('stage', stage, props.class)}>
-      {props.children}
+      {children}
     </div>
   );
 }
