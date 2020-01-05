@@ -139,7 +139,7 @@ export function Shape(props: ShapeProps) {
           onMove?.([x + txy[0], y + txy[1]]);
 
           return [0, 0];
-        })
+        });
       };
 
       document.addEventListener('mousemove', onMouseMove);
