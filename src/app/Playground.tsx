@@ -1,6 +1,6 @@
 import { cx, css } from 'emotion';
-import { h, JSX } from 'preact';
-import { useState, useReducer } from 'preact/hooks';
+import { h } from 'preact';
+import { useState } from 'preact/hooks';
 
 import { Forest, Tree } from '../models/Tree';
 import { Stage } from '../Stage/Stage';
@@ -19,14 +19,12 @@ export type PlaygroundProps = {
 
 
 const playgroundStyles = css`
-
   ${gridBG}
 
   overflow: hidden;
 `;
 
 type Connector = {
-  type: String;
   left: ShapeInstance;
   right: ShapeInstance;
 };
@@ -39,19 +37,19 @@ type StageData = {
 function getAllConnectorsFromTree(tree: Tree<AnyShape>): Connector[] {
   function addConnector(tree: Tree<AnyShape>, parent: Tree<AnyShape>): Connector[] {
     return [{
-        type: 'Connector',
         left: parent.context.specs,
         right: tree.context.specs
       }]
-      .concat(...tree.children.map(node => addConnector(node, tree)));
+      .concat(...tree.children.map((node) => addConnector(node, tree)));
   }
 
   return tree.children
-    .map(node => addConnector(node, tree))
+    .map((node) => addConnector(node, tree))
     .flat();
 }
 
 function getAllShapesFromTree(tree: Tree<AnyShape>): AnyShape[] {
+
   function addShape(tree: Tree<AnyShape>): AnyShape[] {
     return [tree.context]
       .concat(...tree.children.map(addShape));
@@ -72,9 +70,9 @@ function flattenForest(forest: Forest<AnyShape> = { trees: [] }): StageData {
   return forest
     .trees
     .map(flattenTree)
-    .reduce((data, acc) => ({
-      connectors: acc.connectors.concat(data.connectors),
-      shapes: acc.shapes.concat(data.shapes)
+    .reduce((acc, nextItem) => ({
+      connectors: nextItem.connectors.concat(acc.connectors),
+      shapes: nextItem.shapes.concat(acc.shapes)
     }), {
       connectors: [],
       shapes: []
@@ -151,7 +149,7 @@ export function Playground(props: PlaygroundProps) {
           setStageData({
             connectors: stageData.connectors,
             shapes: newShapes
-          });;
+          });
           setUnderMovement(true);
         };
 
@@ -162,7 +160,6 @@ export function Playground(props: PlaygroundProps) {
         );
     }
 
-    return null as any as JSX.Element;
   });
 
   const connectors = stageData
