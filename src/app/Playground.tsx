@@ -37,49 +37,28 @@ type StageData = {
 }
 
 function getAllConnectorsFromTree(tree: Tree<AnyShape>): Connector[] {
-  const connectors: Connector[] = [];
-
-  function iterator(tree: Tree<AnyShape>, parent: Tree<AnyShape>) {
-    connectors.push({
-      type: 'Connector',
-      left: parent.context.specs,
-      right: tree.context.specs
-    });
-
-    tree.children.map(node => {
-      iterator(node, tree);
-    });
+  function addConnector(tree: Tree<AnyShape>, parent: Tree<AnyShape>): Connector[] {
+    return [{
+        type: 'Connector',
+        left: parent.context.specs,
+        right: tree.context.specs
+      }]
+      .concat(...tree.children.map(node => addConnector(node, tree)));
   }
 
-  tree.children.map(node => {
-    iterator(node, tree);
-  });
-
-  return connectors;
-
-  // TODO: Kumar - replace the imperative code above
-  // function addConnector(tree: Tree<AnyShape>, parent: Tree<AnyShape>): Connector[] {
-  //   return [{
-  //       type: 'Connector',
-  //       left: parent.context.specs,
-  //       right: tree.context.specs
-  //     }]
-  //     .concat(...tree.children.map(node => addConnector(node, tree)))
-  //     .flat();
-  // }
-
-  // return tree.children
-  //   .map(node => addConnector(node, tree));
+  return tree.children
+    .map(node => addConnector(node, tree))
+    .flat();
 }
 
 function getAllShapesFromTree(tree: Tree<AnyShape>): AnyShape[] {
-  function addNode(tree: Tree<AnyShape>): AnyShape[] {
+  function addShape(tree: Tree<AnyShape>): AnyShape[] {
     return [tree.context]
-      .concat(...tree.children.map(addNode))
-      .flat();
+      .concat(...tree.children.map(addShape));
   }
 
-  return addNode(tree);
+  return addShape(tree)
+    .flat();
 }
 
 function flattenTree(tree: Tree<AnyShape>): StageData {
