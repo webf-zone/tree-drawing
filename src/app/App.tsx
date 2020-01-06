@@ -1,6 +1,8 @@
 import { css, cx } from 'emotion';
 import { h } from 'preact';
 import { Playground } from './Playground';
+import { Forest, TreeNode } from '../models/Tree';
+import { AnyShape } from '../shapes/AllShapes';
 
 
 const appStyle = css`
@@ -46,6 +48,46 @@ const playgroundStyle = css`
   min-height: 0;
 `;
 
+const forest: Forest<AnyShape> = {
+  trees: [{
+    context: {
+      type: 'UnclonedBackupJobs',
+      specs: {
+        x: 0,
+        y: 0,
+
+        width: 400,
+        height: 300,
+
+        selected: false
+      }
+    },
+    children: [{
+      context: {
+        type: 'UnclonedBackupJobs',
+        specs: {
+          x: 800,
+          y: 200,
+          height: 100,
+          width: 200
+        }
+      },
+      children: []
+    }]
+  }, {
+    context: {
+      type: 'UnclonedBackupJobs',
+      specs: {
+        x: 200,
+        y: 400,
+        height: 100,
+        width: 200
+      }
+    },
+    children: []
+  }]
+};
+
 export function App() {
 
   return (
@@ -56,7 +98,7 @@ export function App() {
       <div class={toolboxStyle}>
         <p>Toolbox</p>
       </div>
-      <Playground class={playgroundStyle} />
+      <Playground class={playgroundStyle} forest={forest} />
     </div>
   );
 }

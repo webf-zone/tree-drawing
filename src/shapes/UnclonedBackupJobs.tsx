@@ -23,4 +23,3 @@ export function UnclonedBackupJobs(props: UnclonedBackupJobsProps) {
     <Box class={shapeStyle} body={text} title={text} minWidth={300} minHeight={100} {...props} />
   );
 }
-

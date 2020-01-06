@@ -20,6 +20,10 @@ const stage = css`
   min-height: 100%;
 
   position: relative;
+
+  :active {
+    cursor: grabbing;
+  }
 `;
 
 const canvas = css`

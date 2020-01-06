@@ -2,13 +2,13 @@ export interface TreeNode<T = any> {
 
   context: T;
 
-  children: TreeNode[];
+  children: TreeNode<T>[];
 }
 
 
-export interface Tree extends TreeNode {}
+export interface Tree<T> extends TreeNode<T> {}
 
 
-export interface Forest {
-  trees: Tree[];
+export interface Forest<T> {
+  trees: Tree<T>[];
 }
