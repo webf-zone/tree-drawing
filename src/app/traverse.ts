@@ -8,7 +8,9 @@ type Depth = {
 
 // WARNING: EVERYTHING IS MUTABLE HERE. BECAUSE, I AM NOW TIRED OF WRITING THIS CODE.
 // IT IS TOO MUCH COMPLEXITY IN A SINGLE DAY.
-export function beautify(tree: Tree<AnyShape>) {
+export function beautify(originalTree: Tree<AnyShape>) {
+
+  const tree = JSON.parse(JSON.stringify(originalTree));
 
   // Depth vs max height
   const depth: Depth = {};

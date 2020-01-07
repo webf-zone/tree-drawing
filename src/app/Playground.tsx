@@ -28,6 +28,17 @@ const playgroundStyles = css`
   overflow: hidden;
 `;
 
+const animatePlayground = css`
+  .shape {
+    transition: all 300ms ease-out;
+  }
+
+  .arrow {
+    /* transition: all 1200ms ease-out; */
+    opacity: 0;
+  }
+`;
+
 type Connector = {
   type: 'Connector';
   left: ShapeInstance;
@@ -87,11 +98,18 @@ function flattenForest(forest: Forest<AnyShape> = { trees: [] }): StageData {
 export function Playground(props: PlaygroundProps) {
 
   const [underMovement, setUnderMovement] = useState(false);
+  const [canAnimate, setCanAnimate] = useState(false);
 
   const [stageData, setStageData] = useState(flattenForest());
 
   useEffect(() => {
-    setStageData(flattenForest(props.forest));
+    setCanAnimate(true);
+
+    setStageData(flattenForest(props.forest))
+
+    const timeout = setTimeout(() => setCanAnimate(false), 350);
+
+    return () => clearTimeout(timeout);
   }, [props.forest]);
 
   const children = stageData.shapes.map(({ type, specs }, index) => {
@@ -181,7 +199,7 @@ export function Playground(props: PlaygroundProps) {
   const allChildren = [...children, ...connectors];
 
   return (
-    <div class={cx('playground', playgroundStyles, props.class)}>
+    <div class={cx('playground', playgroundStyles, canAnimate && animatePlayground, props.class)}>
       <Stage underMovement={underMovement}>
         {allChildren}
       </Stage>
