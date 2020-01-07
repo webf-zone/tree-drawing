@@ -43,8 +43,8 @@ function flattenTree(tree: Tree<AnyShape>): StageData {
       // Connector
       parent && {
         type: 'Connector',
-        left: parent.context.specs,
-        right: tree.context.specs
+        left: tree.context.specs,
+        right: parent.context.specs
       } as any]
       // recursion for tree
       .concat(...tree.children.map((node) => addShape(node, tree)));
