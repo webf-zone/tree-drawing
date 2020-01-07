@@ -10,6 +10,7 @@ import { useAnimationWhen } from './hook';
 export interface ShapeProps extends BaseShape {
   class?: string;
   children: JSX.Element | JSX.Element[];
+  canResize?: boolean;
 }
 
 const shapeStyle = css`
@@ -193,9 +194,12 @@ export function Shape(props: ShapeProps) {
     <div class={shapeStyles} style={style} onMouseDown={onDragBegin}>
       {props.children}
 
-      <div class={resizeIcon} onMouseDown={onResizeBegin}>
-        <SVGIcon name='replayConsistency' width='18px' height='18px' />
-      </div>
+      {props.canResize !== false
+        ? <div class={resizeIcon} onMouseDown={onResizeBegin}>
+          <SVGIcon name='replayConsistency' width='18px' height='18px' />
+        </div>
+        : null
+      }
 
       {(selected || isResize)
         ? <div class={selectionFrameStyle} style={selectionStyle}></div>

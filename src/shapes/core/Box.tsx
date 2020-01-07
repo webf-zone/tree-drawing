@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import { cx, css } from 'emotion';
 
-import { SVGIcon } from '../../icons/SVGIcon';
+import { SVGIcon, IconType } from '../../icons/SVGIcon';
 
 import { BaseShape } from './BaseShape';
 import { Shape } from './Shape';
@@ -15,6 +15,8 @@ const boxStyle = css`
 
   --title-fill: gray;
   --body-fill: gray;
+
+  box-shadow: 4px 4px 10px 0px rgba(0, 0, 0, 0.2);
 `;
 
 
@@ -44,6 +46,25 @@ const linkStyle = css`
   margin-left: auto;
 `;
 
+const circleStyles = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  background-color: brown;
+  color: white;
+
+  overflow: hidden;
+
+  border-radius: 50%;
+  box-shadow: 4px 4px 10px 0px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+`;
+
 
 export interface BoxProps extends BaseShape {
   class?: string;
@@ -55,9 +76,19 @@ export interface BoxProps extends BaseShape {
   selected?: boolean;
 };
 
+export interface CircleProps extends BaseShape {
+  class?: string;
+
+  title: string;
+  iconName: IconType;
+
+  onResize?: (dim: [number, number]) => void;
+  selected?: boolean;
+}
+
 export function Box(props: BoxProps) {
 
-  const { title, body, minHeight, minWidth, x, y, width, height } = props;
+  const { title, body } = props;
 
   return (
     <Shape {...props}>
@@ -72,6 +103,23 @@ export function Box(props: BoxProps) {
         <div class={bodyStyle}>
           {body}
         </div>
+      </div>
+    </Shape>
+  );
+}
+
+const iconStyle = css`
+  width: 70%;
+  fill: currentColor;
+  transform: rotateX(180deg);
+`;
+
+export function Circle(props: CircleProps) {
+  return (
+    <Shape canResize={false} {...props}>
+      <div class={cx(circleStyles, 'shape-selector', props.class)}>
+        <SVGIcon class={cx(iconStyle)} name={props.iconName} />
+        <div>{props.title}</div>
       </div>
     </Shape>
   );

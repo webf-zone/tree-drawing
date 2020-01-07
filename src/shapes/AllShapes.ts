@@ -6,5 +6,17 @@ export type UnclonedBackupJobs = {
   specs: ShapeInstance;
 };
 
+export type ReportType = {
+  type: 'ReportType';
+  specs: ShapeInstance;
+};
+
+export type Merge = {
+  type: 'Merge';
+  specs: ShapeInstance;
+};
+
 export type AnyShape =
-  | UnclonedBackupJobs;
+  | UnclonedBackupJobs
+  | ReportType
+  | Merge;

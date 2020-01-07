@@ -8,7 +8,7 @@ type Depth = {
 
 // WARNING: EVERYTHING IS MUTABLE HERE. BECAUSE, I AM NOW TIRED OF WRITING THIS CODE.
 // IT IS TOO MUCH COMPLEXITY IN A SINGLE DAY.
-export function traverse(tree: Tree<AnyShape>) {
+export function beautify(tree: Tree<AnyShape>) {
 
   // Depth vs max height
   const depth: Depth = {};
@@ -67,7 +67,7 @@ function innerTraverse(tree: Tree<AnyShape>, allWidth: number, depth: number, de
 
     } else {
       const { x: lX } = tree.children[0].context.specs;
-      const { x: lR, width: rWidth } = tree.children[tree.children.length].context.specs;
+      const { x: lR, width: rWidth } = tree.children[tree.children.length - 1].context.specs;
 
       const selfWidth = tree.context.specs.width;
       const midChildX = lX + ((lR + rWidth) / 2);

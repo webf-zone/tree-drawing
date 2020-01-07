@@ -4,7 +4,7 @@ import { AnyShape } from './shapes/AllShapes';
 export const sampleForest: Forest<AnyShape> = {
   trees: [{
     context: {
-      type: 'UnclonedBackupJobs',
+      type: 'ReportType',
       specs: {
         x: 0,
         y: 0,
@@ -19,12 +19,12 @@ export const sampleForest: Forest<AnyShape> = {
     [
       {
         context: {
-          type: 'UnclonedBackupJobs',
+          type: 'Merge',
           specs: {
             x: 800,
             y: 200,
-            height: 100,
-            width: 300
+            height: 150,
+            width: 150
           }
         },
         children: [{

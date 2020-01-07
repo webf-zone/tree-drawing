@@ -1,8 +1,11 @@
 import { css, cx } from 'emotion';
 import { h } from 'preact';
-import { Playground } from './Playground';
+import { useState } from 'preact/hooks';
 
 import { sampleForest } from '../sample';
+import { Button } from './Button';
+import { Playground } from './Playground';
+import { beautify } from './traverse';
 
 
 const appStyle = css`
@@ -39,6 +42,8 @@ const toolboxStyle = css`
   width: 300px;
 
   background: #F8F8F8;
+
+  padding: 1rem;
 `;
 
 const playgroundStyle = css`
@@ -50,15 +55,26 @@ const playgroundStyle = css`
 
 export function App() {
 
+  const [forest, setForest] = useState(sampleForest);
+
+  const onClick = () => {
+
+    const tree = forest.trees[0];
+    const newTree = beautify(tree);
+
+    setForest({ trees: [newTree] });
+  };
+
   return (
     <div class={cx('app', appStyle)}>
       <header class={headerStyle}>
         <h1>Application - Reingold Tilford</h1>
       </header>
       <div class={toolboxStyle}>
-        <p>Toolbox</p>
+        <strong>Toolbox</strong>
+        <Button onClick={onClick}>Beautify</Button>
       </div>
-      <Playground class={playgroundStyle} forest={sampleForest} />
+      <Playground class={playgroundStyle} forest={forest} />
     </div>
   );
 }
