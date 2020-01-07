@@ -6,6 +6,7 @@ import { sampleForest } from '../sample';
 import { Button } from './Button';
 import { Playground } from './Playground';
 import { beautify } from './traverse';
+import { SVGIcon } from '../icons/SVGIcon';
 
 
 const appStyle = css`
@@ -43,6 +44,7 @@ const toolboxStyle = css`
 
   background: #F8F8F8;
   border-right: 1px solid #f0f0f0;
+  box-shadow: 0 0 4px rgb(200, 200, 200);
 `;
 
 const playgroundStyle = css`
@@ -70,6 +72,19 @@ const toolboxHeader = css`
   text-transform: uppercase;
   letter-spacing: 0.2rem;
   margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+
+  svg {
+    margin-right: 1rem;
+    fill: currentColor;
+  }
+`;
+
+const resetStyle = css`
+  svg .o1 {
+    fill: lightgrey;
+  }
 `;
 
 export function App() {
@@ -104,13 +119,16 @@ export function App() {
         <h1>Application - Reingold Tilford</h1>
       </header>
       <div class={toolboxStyle}>
-        <div class={toolboxHeader}>Toolbox</div>
+        <div class={toolboxHeader}>
+          <SVGIcon name="menu" width="24" height="24"></SVGIcon>
+          Toolbox
+        </div>
         <Button class={beautifyStyle} onClick={onClick}>Beautify</Button>
         <hr /><br />
         <div class={zoomStatusStyle}>Zoom Level: {zoom.toFixed(1)}</div>
         <Button onClick={onZoomIn}>Zoom In (+) </Button>
         <Button onClick={onZoomOut}>Zoom Out (-) </Button>
-        <Button onClick={onZoomReset}>Zoom Reset</Button>
+        <Button class={resetStyle} onClick={onZoomReset}>Zoom Reset</Button>
       </div>
       <Playground class={playgroundStyle} forest={forest} scale={zoom} />
     </div>
