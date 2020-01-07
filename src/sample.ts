@@ -27,7 +27,29 @@ export const sampleForest: Forest<AnyShape> = {
             width: 200
           }
         },
-        children: []
+        children: [{
+          context: {
+            type: 'UnclonedBackupJobs',
+            specs: {
+              x: 1000,
+              y: 350,
+              height: 100,
+              width: 200
+            }
+          },
+          children: []
+        }, {
+          context: {
+            type: 'UnclonedBackupJobs',
+            specs: {
+              x: 600,
+              y: 350,
+              height: 100,
+              width: 200
+            }
+          },
+          children: []
+        }]
       }
     ]
   }]

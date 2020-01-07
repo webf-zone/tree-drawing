@@ -95,17 +95,11 @@ export function Playground(props: PlaygroundProps) {
             ...stageData.shapes
           ];
 
-          newShapes[index] = {
-              type,
-              specs: {
-                ...specs,
-                width,
-                height
-              }
-          };
+          newShapes[index].specs.width = width;
+          newShapes[index].specs.height = height;
 
           setStageData({
-            connectors: stageData.connectors,
+            connectors: [...stageData.connectors],
             shapes: newShapes
           });
         };
