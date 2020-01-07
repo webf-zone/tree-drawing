@@ -16,6 +16,8 @@ export const buttonStyles = css`
 
 	cursor: pointer;
 
+	margin: 1rem;
+
 	svg {
 		height: 55px;
 		width: 150px;

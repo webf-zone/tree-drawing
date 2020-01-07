@@ -11,6 +11,7 @@ export type StageProps = {
   width?: number;
   height?: number;
   underMovement: boolean;
+  scale: number;
 };
 
 
@@ -32,6 +33,8 @@ const canvas = css`
 
 
 export function Stage(props: StageProps) {
+
+  const { scale } = props;
 
   const rootElm = useRef<HTMLDivElement>(null as any);
   const [isDrag, setIsDrag] = useState(false);
@@ -149,7 +152,7 @@ export function Stage(props: StageProps) {
   };
 
   const style = {
-    transform: `translate3d(${translateXY[0]}px, ${translateXY[1]}px, 0)`
+    transform: `scale3d(${scale}, ${scale}, ${scale}) translate3d(${translateXY[0]}px, ${translateXY[1]}px, 0)`
   };
 
   return (

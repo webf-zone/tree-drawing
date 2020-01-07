@@ -19,6 +19,7 @@ import { gridBG } from './stageGrid';
 export type PlaygroundProps = {
   class: string;
   forest?: Forest<AnyShape>;
+  scale: number;
 };
 
 
@@ -200,7 +201,7 @@ export function Playground(props: PlaygroundProps) {
 
   return (
     <div class={cx('playground', playgroundStyles, canAnimate && animatePlayground, props.class)}>
-      <Stage underMovement={underMovement}>
+      <Stage underMovement={underMovement} scale={props.scale}>
         {allChildren}
       </Stage>
     </div>
