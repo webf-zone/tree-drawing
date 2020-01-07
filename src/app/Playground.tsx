@@ -25,6 +25,7 @@ const playgroundStyles = css`
 `;
 
 type Connector = {
+  type: 'Connector';
   left: ShapeInstance;
   right: ShapeInstance;
 };
@@ -34,36 +35,36 @@ type StageData = {
   connectors: Connector[];
 }
 
-function getAllConnectorsFromTree(tree: Tree<AnyShape>): Connector[] {
-  function addConnector(tree: Tree<AnyShape>, parent: Tree<AnyShape>): Connector[] {
-    return [{
+function flattenTree(tree: Tree<AnyShape>): StageData {
+  function addShape(tree: Tree<AnyShape>, parent?: Tree<AnyShape>): (AnyShape | Connector)[] {
+    return [
+      // AnyShape
+      tree.context,
+      // Connector
+      parent && {
+        type: 'Connector',
         left: parent.context.specs,
         right: tree.context.specs
-      }]
-      .concat(...tree.children.map((node) => addConnector(node, tree)));
-  }
-
-  return tree.children
-    .map((node) => addConnector(node, tree))
-    .flat();
-}
-
-function getAllShapesFromTree(tree: Tree<AnyShape>): AnyShape[] {
-
-  function addShape(tree: Tree<AnyShape>): AnyShape[] {
-    return [tree.context]
-      .concat(...tree.children.map(addShape));
+      } as any]
+      // recursion for tree
+      .concat(...tree.children.map((node) => addShape(node, tree)));
   }
 
   return addShape(tree)
-    .flat();
-}
-
-function flattenTree(tree: Tree<AnyShape>): StageData {
-  return {
-    connectors: getAllConnectorsFromTree(tree),
-    shapes: getAllShapesFromTree(tree)
-  };
+    .flat()
+    .reduce((acc, node) => {
+      return {
+        connectors: (node && node.type === 'Connector')
+          ? acc.connectors.concat(node)
+          : acc.connectors || [],
+        shapes: (node && node.type !== 'Connector')
+          ? acc.shapes.concat(node)
+          : acc.shapes || []
+      };
+    }, {
+      connectors: [],
+      shapes: []
+    });
 }
 
 function flattenForest(forest: Forest<AnyShape> = { trees: [] }): StageData {
@@ -114,19 +115,13 @@ export function Playground(props: PlaygroundProps) {
             ...stageData.shapes
           ];
 
-          newShapes[index] = {
-            type,
-            specs: {
-              ...specs,
-              x,
-              y,
-              tempX: undefined,
-              tempY: undefined
-            }
-          };
+          newShapes[index].specs.x = x;
+          newShapes[index].specs.y = y;
+          newShapes[index].specs.tempX = undefined;
+          newShapes[index].specs.tempY = undefined;
 
           setStageData({
-            connectors: stageData.connectors,
+            connectors: [...stageData.connectors],
             shapes: newShapes
           });
           setUnderMovement(false);
@@ -137,17 +132,11 @@ export function Playground(props: PlaygroundProps) {
             ...stageData.shapes
           ];
 
-          newShapes[index] = {
-            type,
-            specs: {
-              ...specs,
-              tempX: x,
-              tempY: y
-            }
-          };
+          newShapes[index].specs.tempX = x;
+          newShapes[index].specs.tempY = y;
 
           setStageData({
-            connectors: stageData.connectors,
+            connectors: [...stageData.connectors],
             shapes: newShapes
           });
           setUnderMovement(true);
