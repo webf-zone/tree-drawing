@@ -1,5 +1,9 @@
 import { ShapeInstance } from './core/BaseShape';
 
+export type AddField = {
+  type: 'AddField',
+  specs: ShapeInstance;
+};
 
 export type UnclonedBackupJobs = {
   type: 'UnclonedBackupJobs';
@@ -17,6 +21,7 @@ export type Merge = {
 };
 
 export type AnyShape =
+  | AddField
   | UnclonedBackupJobs
   | ReportType
   | Merge;

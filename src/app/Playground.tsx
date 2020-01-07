@@ -4,13 +4,14 @@ import { useState, useEffect } from 'preact/hooks';
 
 import { Forest, Tree } from '../models/Tree';
 import { Stage } from '../Stage/Stage';
-import { UnclonedBackupJobs } from '../shapes/UnclonedBackupJobs';
-import { Connector } from '../shapes/core/Connector';
 
 import { AnyShape } from '../shapes/AllShapes';
 import { ShapeInstance } from '../shapes/core/BaseShape';
-import { ReportType } from '../shapes/ReportType';
+import { Connector } from '../shapes/core/Connector';
+import { UnclonedBackupJobs } from '../shapes/UnclonedBackupJobs';
+import { AddField } from '../shapes/AddField';
 import { Merge } from '../shapes/Merge';
+import { ReportType } from '../shapes/ReportType';
 
 import { gridBG } from './stageGrid';
 
@@ -142,6 +143,13 @@ export function Playground(props: PlaygroundProps) {
     };
 
     switch (type) {
+      case 'AddField':
+        return (
+          <AddField x={specs.x} y={specs.y} width={specs.width} height={specs.height}
+            onResize={onResize} selected={specs.selected}
+            onMove={onMove} onMoving={onMoving} />
+        );
+
       case 'UnclonedBackupJobs':
         return (
           <UnclonedBackupJobs x={specs.x} y={specs.y} width={specs.width} height={specs.height}

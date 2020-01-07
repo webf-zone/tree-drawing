@@ -2,7 +2,7 @@ import { cx, css } from 'emotion';
 import { h } from 'preact';
 
 import { Box } from './core/Box';
-import { BaseShape, ShapeInstance } from './core/BaseShape';
+import { ShapeInstance } from './core/BaseShape';
 
 
 export interface UnclonedBackupJobsProps extends ShapeInstance {
