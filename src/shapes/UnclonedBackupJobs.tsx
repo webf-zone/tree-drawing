@@ -11,7 +11,7 @@ export interface UnclonedBackupJobsProps extends ShapeInstance {
 
 const shapeStyle = css`
   --title-fill: #EBD397;
-  --body-fill: #EAEAEA;
+  --body-fill: #FFFFFF;
 `;
 
 

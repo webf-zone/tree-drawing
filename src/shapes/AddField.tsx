@@ -11,7 +11,7 @@ export interface AddFieldProps extends ShapeInstance {
 
 const shapeStyle = css`
   --title-fill: lightsteelblue;
-  --body-fill: #EAEAEA;
+  --body-fill: #FFFFFF;
 `;
 
 

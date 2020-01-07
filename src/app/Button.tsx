@@ -1,8 +1,9 @@
-import { css } from 'emotion';
+import { css, cx } from 'emotion';
 import { h, JSX } from 'preact';
 
 export type ButtonProps = {
-  children: string | JSX.Element | JSX.Element[];
+	children: string | JSX.Element | JSX.Element[];
+	class?: string;
 
   onClick: () => void;
 };
@@ -59,7 +60,7 @@ export const buttonStyles = css`
 export function Button(props: ButtonProps) {
 
   return (
-    <button class={buttonStyles} onClick={props.onClick}>
+    <button class={cx(buttonStyles, props.class)} onClick={props.onClick}>
       <span>{props.children}</span>
 		  <svg>
 		    <polyline class='o1' points='0 0, 150 0, 150 55, 0 55, 0 0'></polyline>

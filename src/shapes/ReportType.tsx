@@ -11,7 +11,7 @@ export interface ReportTypeProps extends ShapeInstance {
 
 const shapeStyle = css`
   --title-fill: teal;
-  --body-fill: #EAEAEA;
+  --body-fill: #FFFFFF;
 `;
 
 

@@ -42,8 +42,7 @@ const toolboxStyle = css`
   width: 300px;
 
   background: #F8F8F8;
-
-  padding: 1rem;
+  border-right: 1px solid #f0f0f0;
 `;
 
 const playgroundStyle = css`
@@ -51,6 +50,26 @@ const playgroundStyle = css`
 
   min-width: 0;
   min-height: 0;
+`;
+
+const beautifyStyle = css`
+  svg .o1 {
+    fill: pink;
+  }
+`;
+
+const zoomStatusStyle = css`
+  margin-left: 1rem;
+`;
+
+const toolboxHeader = css`
+  background-color: grey;
+  color: white;
+  font-weight: bold;
+  padding: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  margin-bottom: 2rem;
 `;
 
 export function App() {
@@ -85,10 +104,10 @@ export function App() {
         <h1>Application - Reingold Tilford</h1>
       </header>
       <div class={toolboxStyle}>
-        <strong>Toolbox</strong>
-        <Button onClick={onClick}>Beautify</Button>
-        <hr />
-        <div>Zoom Level: {zoom.toFixed(1)}</div>
+        <div class={toolboxHeader}>Toolbox</div>
+        <Button class={beautifyStyle} onClick={onClick}>Beautify</Button>
+        <hr /><br />
+        <div class={zoomStatusStyle}>Zoom Level: {zoom.toFixed(1)}</div>
         <Button onClick={onZoomIn}>Zoom In (+) </Button>
         <Button onClick={onZoomOut}>Zoom Out (-) </Button>
         <Button onClick={onZoomReset}>Zoom Reset</Button>

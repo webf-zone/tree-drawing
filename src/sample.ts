@@ -7,8 +7,8 @@ export const sampleForest: Forest<AnyShape> = {
       context: {
         type: 'ReportType',
         specs: {
-          x: 0,
-          y: 0,
+          x: 50,
+          y: 50,
 
           width: 400,
           height: 300,
@@ -56,7 +56,7 @@ export const sampleForest: Forest<AnyShape> = {
                   context: {
                     type: 'UnclonedBackupJobs',
                     specs: {
-                      x: 1200,
+                      x: 400,
                       y: 550,
                       height: 100,
                       width: 300
