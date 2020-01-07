@@ -24,7 +24,7 @@ export const sampleForest: Forest<AnyShape> = {
             x: 800,
             y: 200,
             height: 100,
-            width: 200
+            width: 300
           }
         },
         children: [{
@@ -34,7 +34,7 @@ export const sampleForest: Forest<AnyShape> = {
               x: 1000,
               y: 350,
               height: 100,
-              width: 200
+              width: 300
             }
           },
           children: []
@@ -45,7 +45,7 @@ export const sampleForest: Forest<AnyShape> = {
               x: 600,
               y: 350,
               height: 100,
-              width: 200
+              width: 300
             }
           },
           children: []
